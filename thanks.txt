@@ -1,0 +1,2 @@
+Johnny J. from http://www.codeproject.com/Articles/73000/Getting-Operating-System-Version-Info-Even-for-Win
+for the use of his code under the CPOL license.
