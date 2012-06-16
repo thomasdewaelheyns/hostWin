@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace hostWin.dataHandling
 {
     interface FileHandler
     {
         void loadFile(string path, string fileName);
-        string[] getFile();
+        void closeFile();
+        ArrayList getFileContent();
         void backupFile();
-        void writeFile(string[] content);
+        void writeFile(ArrayList content);
     }
 }
