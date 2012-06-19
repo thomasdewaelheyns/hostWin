@@ -103,13 +103,15 @@ namespace hostWin.dataHandling
          */ 
         public void backupFile()
         {
-            //Look if we opened a file already or if we wrote to it already.
-            if (this.content != null && writer == null)
+            //Look if we opened a file already
+            if (this.content != null)
             {
                 String date = DateTime.Now.Date.ToString("dd'-'MM'-'yyyy")+"_"+DateTime.Now.ToString("HH'-'mm'-'ss");
                 try
                 {
-                    StreamWriter tempWriter = new StreamWriter(this.path + this.fileName + "_" + date + ".bak", false, Encoding.UTF8);
+                    String newPath = this.path + "\\hostwin backups\\";
+                    System.IO.Directory.CreateDirectory(newPath);
+                    StreamWriter tempWriter = new StreamWriter(newPath + this.fileName + "_" + date + ".bak", false, Encoding.UTF8);
                     foreach(String line in this.content){
                         System.Console.WriteLine(line);
                         tempWriter.WriteLine(line);
