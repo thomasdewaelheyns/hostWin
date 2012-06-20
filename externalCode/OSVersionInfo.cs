@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 #endregion USINGS
 
-namespace JCS
+namespace hostWin.externalCode
 {
     /// <summary>
     /// Provides detailed information about the host operating system.

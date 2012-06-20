@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<OperatingSystems>
+  <os name="windows">
+    <fileName>host</fileName>
+    <path>%SystemRoot%\system32\drivers\etc\hosts\</path>
+  </os>
+  
+  
+  
+  
+</OperatingSystems>
