@@ -6,12 +6,13 @@ using System.Xml;
 
 namespace hostWin.dataHandling
 {
-    class FilePathReader
+    class WindowsFilePathReader: IFilePathReader
     {
         string path = "";
         string fileName = "";
+        string environmentVariable = "";
 
-        public FilePathReader()
+        public WindowsFilePathReader()
         {
             this.readXmlContent();
         }
@@ -27,6 +28,8 @@ namespace hostWin.dataHandling
                 {
                     reader.ReadToFollowing("fileName");
                     this.fileName = reader.ReadElementContentAsString();
+                    reader.ReadToFollowing("environmentVariable");
+                    this.environmentVariable = reader.ReadElementContentAsString();
                     reader.ReadToFollowing("path");
                     this.path = reader.ReadElementContentAsString();
                     break;
@@ -43,6 +46,11 @@ namespace hostWin.dataHandling
         public String getFileName()
         {
             return this.fileName;
+        }
+
+        public String getEnvironmentVariable()
+        {
+            return this.environmentVariable;
         }
     }
 }

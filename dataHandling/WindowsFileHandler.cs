@@ -7,10 +7,11 @@ using System.Collections;
 
 namespace hostWin.dataHandling
 {
-    class WindowsFileHandler: FileHandler 
+    class WindowsFileHandler: IFileHandler 
     {
         private string fileName = "";
         private string path = "";
+        private string environmentVariable = "";
         private ArrayList content = null;
         private StreamReader reader = null;
         private StreamWriter writer = null;
@@ -22,9 +23,11 @@ namespace hostWin.dataHandling
         /*
          * This method can be used to load a file and reads it content.
          */
-        public void loadFile(string path, string fileName)
+        public void loadFile(string environmentVariable, string path, string fileName)
         {
             //Check the input for errors.
+            if(environmentVariable == null || environmentVariable == "")
+                throw new ArgumentException("The given environmentVariable is empty.");
             if (path == null || path == "")
                 throw new ArgumentException("The given path is empty.");
             if (fileName == null || fileName == "")
@@ -41,9 +44,10 @@ namespace hostWin.dataHandling
             //Open the new file and read its content
             this.path = path;
             this.fileName = fileName;
+            this.environmentVariable = environmentVariable;
             try{
                 this.content = new ArrayList();
-                reader = new StreamReader(this.path + this.fileName);
+                reader = new StreamReader(Environment.ExpandEnvironmentVariables(environmentVariable)+this.path + this.fileName, Encoding.UTF8);
                 string line = reader.ReadLine();
                 
                 while (line != null)
@@ -55,6 +59,7 @@ namespace hostWin.dataHandling
             catch(Exception e){
                 this.path = null;
                 this.fileName = null;
+                this.environmentVariable = null;
                 this.reader = null;
                 this.writer = null;
                 throw new FileNotFoundException("exception: "+e.ToString());
@@ -103,15 +108,15 @@ namespace hostWin.dataHandling
          */ 
         public void backupFile()
         {
-            //Look if we opened a file already
+            //Checks if we opened a file already
             if (this.content != null)
             {
                 String date = DateTime.Now.Date.ToString("dd'-'MM'-'yyyy")+"_"+DateTime.Now.ToString("HH'-'mm'-'ss");
                 try
                 {
-                    String newPath = this.path + "\\hostwin backups\\";
-                    System.IO.Directory.CreateDirectory(newPath);
-                    StreamWriter tempWriter = new StreamWriter(newPath + this.fileName + "_" + date + ".bak", false, Encoding.UTF8);
+                    String newPath = this.path + "hostwin_backups\\";
+                    System.IO.Directory.CreateDirectory(Environment.ExpandEnvironmentVariables(environmentVariable)+newPath);
+                    StreamWriter tempWriter = new StreamWriter(Environment.ExpandEnvironmentVariables(environmentVariable)+newPath + this.fileName + "_" + date + ".bak", false, Encoding.UTF8);
                     foreach(String line in this.content){
                         System.Console.WriteLine(line);
                         tempWriter.WriteLine(line);
@@ -135,8 +140,8 @@ namespace hostWin.dataHandling
                 throw new Exception("We cannot write this content.");
             if (this.content == null)
                 throw new Exception("No file opened, therefor we cannot write to it.");
-            if (this.path == null || this.path == "" || this.fileName == null || this.fileName == "")
-                throw new Exception("No valid path and/or filename.");
+            if (this.path == null || this.path == "" || this.fileName == null || this.fileName == "" || this.environmentVariable == null || this.environmentVariable == "")
+                throw new Exception("No valid environment variable, path and/or filename.");
 
             this.content = content;
             if (this.reader != null)
@@ -146,7 +151,7 @@ namespace hostWin.dataHandling
             }
             try
             {
-                writer = new StreamWriter(this.path + this.fileName, false, Encoding.UTF8);
+                writer = new StreamWriter(Environment.ExpandEnvironmentVariables(environmentVariable)+this.path + this.fileName, false, Encoding.UTF8);
                 foreach (String line in this.content)
                 {
                     writer.WriteLine(line);

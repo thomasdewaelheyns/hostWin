@@ -6,9 +6,9 @@ using System.Collections;
 
 namespace hostWin.dataHandling
 {
-    interface FileHandler
+    interface IFileHandler
     {
-        void loadFile(string path, string fileName);
+        void loadFile(string environmentVariable, string path, string fileName);
         void closeFile();
         ArrayList getFileContent();
         void backupFile();
